@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu Page - Urban Bites Café</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --brown:       #3B1F0C;
+    --caramel:     #C97B2F;
+    --gold:        #D4A853;
+    --cream:       #F5ECD7;
+    --orange:      #E8601C;
+    --white:       #FFFFFF;
+    --text-dark:   #1C0F05;
+    --text-mid:    #5A3A1A;
+    --shadow:      0 8px 32px rgba(59,31,12,0.13);
+    --radius:      18px;
+    --tab-h:       44px;
+  }
+
+  body {
+    font-family: 'Boldonse';
+    src: url('fonts/Boldonse.ttf') format('opentype');
+    background-image: url('images/cafe-background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: var(--text-dark);
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 64px;
+    background: #eacb5c;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(59,31,12,.15);
+  }
+  .logo {
+    font-family: 'Boldonse';
+    src: url('fonts/Boldonse.ttf') format('opentype');
+    font-weight: 900;
+    font-size: 1.25rem;
+    color: var(--brown);
+    letter-spacing: .5px;
+  }
+  .nav { display: flex; gap: 36px; }
+  .nav a {
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .95rem;
+    color: var(--brown);
+    transition: color .2s;
+  }
+  .nav a:hover { color: var(--orange); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    height: 300px;
+    background: linear-gradient(135deg, var(--brown) 0%, #6B3A1F 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #4B2E2E;
+    opacity: .22;
+  }
+  .hero-badge {
+    position: relative;
+    background: var(--brown);
+    color: var(--white);
+    font-family: 'Boldonse';
+    src: url('fonts/Boldonse.ttf') format('opentype');
+    font-size: 3rem;
+    font-weight: 900;
+    letter-spacing: 3px;
+    padding: 18px 60px;
+    border-radius: 60px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    box-shadow: 0 6px 30px rgba(0,0,0,.35);
+  }
+  .hero-sub {
+    position: relative;
+    color: var(--cream);
+    font-size: 1.05rem;
+    font-weight: 300;
+    letter-spacing: .5px;
+  }
+
+  /* ── CATEGORY TABS ── */
+  .tabs-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    padding: 28px 24px 0;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    height: var(--tab-h);
+    padding: 0 26px;
+    border-radius: 999px;
+    border: 2px solid transparent;
+    font-family: 'Boldonse';
+    src: url('fonts/Boldonse.ttf') format('opentype');
+    font-weight: 600;
+    font-size: .9rem;
+    cursor: pointer;
+    transition: all .25s ease;
+    background: var(--white);
+    color: var(--brown);
+    border-color: rgba(59,31,12,.15);
+    box-shadow: 0 2px 8px rgba(59,31,12,.07);
+  }
+  .tab-btn:hover {
+    background: var(--gold);
+    color: var(--brown);
+    border-color: var(--gold);
+    transform: translateY(-1px);
+  }
+  .tab-btn.active {
+    background: var(--orange);
+    color: var(--white);
+    border-color: var(--orange);
+    box-shadow: 0 4px 14px rgba(232,96,28,.35);
+  }
+
+  /* ── MENU GRID ── */
+  .menu-section {
+    padding: 32px 40px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .category-group { display: none; }
+  .category-group.visible { display: contents; }
+
+  .items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 24px;
+    margin-top: 28px;
+  }
+
+  /* ── ITEM CARD ── */
+  .item-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    transition: transform .25s ease, box-shadow .25s ease;
+    position: relative;
+  }
+  .item-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 48px rgba(59,31,12,.18);
+  }
+  .item-card .badge-new {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--orange);
+    color: #fff;
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+    z-index: 2;
+  }
+  .card-img-wrap {
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+    position: relative;
+  }
+  .card-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .4s ease;
+  }
+  .item-card:hover .card-img-wrap img { transform: scale(1.06); }
+
+  /* pill overlay icon */
+  .card-img-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(59,31,12,.3) 0%, transparent 60%);
+  }
+
+  .card-body {
+    padding: 18px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 6px;
+  }
+  .card-name {
+    font-family: 'Boldonse';
+    src: url('fonts/Boldonse.ttf') format('opentype');
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--brown);
+  }
+  .card-desc {
+    font-size: .83rem;
+    color: var(--text-mid);
+    line-height: 1.5;
+    flex: 1;
+  }
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    gap: 8px;
+  }
+  .card-price {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--brown);
+  }
+  .card-price span { font-size: .75rem; font-weight: 400; color: var(--text-mid); }
+
+  /* order button + qty control */
+  .btn-order {
+    background: var(--caramel);
+    color: var(--white);
+    border: none;
+    border-radius: 999px;
+    padding: 9px 18px;
+    font-family: 'Boldonse';
+    src: url('fonts/Boldonse.ttf') format('opentype');
+    font-weight: 600;
+    font-size: .83rem;
+    cursor: pointer;
+    transition: background .2s, transform .15s;
+    white-space: nowrap;
+  }
+  .btn-order:hover { background: var(--orange); transform: scale(1.04); }
+
+  .qty-ctrl {
+    display: none;
+    align-items: center;
+    gap: 6px;
+  }
+  .qty-ctrl.show { display: flex; }
+  .qty-btn {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--caramel);
+    background: transparent;
+    color: var(--caramel);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
+  }
+  .qty-btn:hover { background: var(--caramel); color: #fff; }
+  .qty-num {
+    font-weight: 700;
+    font-size: .95rem;
+    min-width: 20px;
+    text-align: center;
+    color: var(--brown);
+  }
+
+  /* ── DROPDOWN DETAIL ── */
+  .card-detail-toggle {
+    background: none;
+    border: none;
+    color: var(--caramel);
+    font-size: .78rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0;
+    transition: color .2s;
+  }
+  .card-detail-toggle:hover { color: var(--orange); }
+  .card-detail-toggle svg { transition: transform .3s; }
+  .card-detail-toggle.open svg { transform: rotate(180deg); }
+
+  .card-detail-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s ease, padding .35s ease;
+    background: var(--cream);
+    border-top: 1px solid rgba(59,31,12,.08);
+  }
+  .card-detail-panel.open { max-height: 200px; }
+  .card-detail-inner {
+    padding: 14px 18px;
+    font-size: .8rem;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+  .card-detail-inner ul { padding-left: 14px; margin-top: 6px; }
+  .card-detail-inner li { margin-bottom: 2px; }
+
+  /* ── CART TOAST ── */
+  #cart-toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background: var(--brown);
+    color: var(--white);
+    padding: 14px 22px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: .9rem;
+    box-shadow: 0 8px 28px rgba(0,0,0,.28);
+    z-index: 999;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity .3s, transform .3s;
+    pointer-events: none;
+  }
+  #cart-toast.show { opacity: 1; transform: translateY(0); }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: rgb(255, 158, 40);
+    color: var(--white);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 32px;
+    padding: 40px 60px;
+    flex-wrap: wrap;
+  }
+  .footer h3 { font-family: 'Boldonse', serif; font-size: 1rem; margin-bottom: 8px; }
+  .footer p, .footer a {
+    font-size: .85rem;
+    color: rgba(255,255,255,.85);
+    text-decoration: none;
+    line-height: 1.9;
+    display: block;
+  }
+  .footer a:hover { color: var(--white); text-decoration: underline; }
+  .footer-tagline {  font-size: .82rem; opacity: .7; margin-top: 4px; }
+
+  @media (max-width: 640px) {
+    .header { padding: 0 18px; }
+    .hero-badge { font-size: 2rem; padding: 14px 36px; }
+    .menu-section { padding: 24px 16px 48px; }
+    .footer { padding: 28px 20px; flex-direction: column; gap: 20px; }
+    .items-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="header">
+  <div class="logo">URBAN BITES CAFÉ</div>
+  <div class="nav">
+    <a href="C:\xampp\htdocs\urbanbites\index.html">Home</a>
+    <a href="C:\xampp\htdocs\urbanbites\menu.html">Menu</a>
+    <a href="C:\xampp\htdocs\urbanbites\about.html">About</a>
+    <a href="C:\xampp\htdocs\urbanbites\contact.html">Contact Us</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">OUR MENU</div>
+  <p class="hero-sub">Freshly prepared meals, drinks, and desserts made daily.</p>
+</div>
+
+<!-- CATEGORY TABS -->
+<div class="tabs-wrap">
+  <button class="tab-btn active" data-cat="all">All</button>
+  <button class="tab-btn" data-cat="cozy"> Cozy Drinks</button>
+  <button class="tab-btn" data-cat="food"> Food</button>
+  <button class="tab-btn" data-cat="desserts"> Desserts</button>
+  <button class="tab-btn" data-cat="cold"> Cold Ones</button>
+</div>
+
+<!-- MENU GRID -->
+<div class="menu-section">
+  <div class="items-grid" id="items-grid">
+
+    <!-- COZY DRINKS -->
+    <div class="category-group visible" data-group="cozy">
+
+      <div class="item-card">
+        <div class="card-img-wrap">
+          <img src="C:\xampp\htdocs\urbanbites\images\Iced Caramel Latte.jpg" alt="Iced Caramel Latte">
+        </div>
+        <div class="card-body">
+          <div class="card-name">Iced Caramel Latte</div>
+          <div class="card-desc">Smooth espresso with creamy caramel over ice — sweet, bold, and refreshing.</div>
+          <button class="card-detail-toggle" onclick="toggleDetail(this)">
+            Details <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="card-footer">
+            <div class="card-price">N$20.00 <span>/ cup</span></div>
+            <button class="btn-order" onclick="addToCart(this, 'Iced Caramel Latte')">Add to Order</button>
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-detail-panel">
+          <div class="card-detail-inner">
+            <strong>Ingredients:</strong>
+            <ul><li>Espresso shot</li><li>Caramel syrup</li><li>Whole milk</li><li>Ice</li></ul>
+            <p style="margin-top:6px;">Allergens: milk, caffeine</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card">
+        <div class="card-img-wrap">
+          <img src="C:\xampp\htdocs\urbanbites\images\Cappuccino.jpg" alt="Cappuccino">
+        </div>
+        <div class="card-body">
+          <div class="card-name">Cappuccino</div>
+          <div class="card-desc">Smooth espresso with steamed milk and a generous creamy foam layer.</div>
+          <button class="card-detail-toggle" onclick="toggleDetail(this)">
+            Details <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="card-footer">
+            <div class="card-price">N$20.00 <span>/ cup</span></div>
+            <button class="btn-order" onclick="addToCart(this, 'Cappuccino')">Add to Order</button>
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-detail-panel">
+          <div class="card-detail-inner">
+            <strong>Ingredients:</strong>
+            <ul><li>Double espresso</li><li>Steamed milk</li><li>Milk foam</li></ul>
+            <p style="margin-top:6px;">Allergens: milk, caffeine</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card">
+        <div class="card-img-wrap">
+          <img src="C:\xampp\htdocs\urbanbites\images\Caramel Macchiato.jpg" alt="Caramel Macchiato">
+        </div>
+        <div class="card-body">
+          <div class="card-name">Caramel Macchiato</div>
+          <div class="card-desc">Sweet caramel layered over smooth espresso and silky steamed milk.</div>
+          <button class="card-detail-toggle" onclick="toggleDetail(this)">
+            Details <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="card-footer">
+            <div class="card-price">N$25.00 <span>/ cup</span></div>
+            <button class="btn-order" onclick="addToCart(this, 'Caramel Macchiato')">Add to Order</button>
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-detail-panel">
+          <div class="card-detail-inner">
+            <strong>Ingredients:</strong>
+            <ul><li>Vanilla syrup</li><li>Steamed milk</li><li>Espresso</li><li>Caramel drizzle</li></ul>
+            <p style="margin-top:6px;">Allergens: milk, caffeine</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card">
+        <span class="badge-new">NEW</span>
+        <div class="card-img-wrap">
+          <img src="C:\xampp\htdocs\urbanbites\images\Mocha.jpg" alt="Mocha">
+        </div>
+        <div class="card-body">
+          <div class="card-name">Mocha</div>
+          <div class="card-desc">Chocolate-infused coffee topped with luscious creamy milk foam.</div>
+          <button class="card-detail-toggle" onclick="toggleDetail(this)">
+            Details <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="card-footer">
+            <div class="card-price">N$25.00 <span>/ cup</span></div>
+            <button class="btn-order" onclick="addToCart(this, 'Mocha')">Add to Order</button>
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-detail-panel">
+          <div class="card-detail-inner">
+            <strong>Ingredients:</strong>
+            <ul><li>Espresso</li><li>Chocolate syrup</li><li>Steamed milk</li><li>Whipped foam</li></ul>
+            <p style="margin-top:6px;">Allergens: milk, caffeine, cocoa</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card">
+        <div class="card-img-wrap">
+          <img src="C:\xampp\htdocs\urbanbites\images\Ceylon Tea.jpg" alt="Ceylon Tea">
+        </div>
+        <div class="card-body">
+          <div class="card-name">Ceylon Tea (5 Roses)</div>
+          <div class="card-desc">Smooth, full-bodied black tea with a delightful light citrus aroma.</div>
+          <button class="card-detail-toggle" onclick="toggleDetail(this)">
+            Details <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="card-footer">
+            <div class="card-price">N$15.00 <span>/ cup</span></div>
+            <button class="btn-order" onclick="addToCart(this, 'Ceylon Tea')">Add to Order</button>
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-detail-panel">
+          <div class="card-detail-inner">
+            <strong>Ingredients:</strong>
+            <ul><li>5 Roses Ceylon black tea</li><li>Hot water</li><li>Optional: milk, sugar</li></ul>
+            <p style="margin-top:6px;">Allergens: caffeine (mild)</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card">
+        <div class="card-img-wrap">
+          <img src="C:\xampp\htdocs\urbanbites\images\Hot Chocolate.jpg" alt="Hot Chocolate">
+        </div>
+        <div class="card-body">
+          <div class="card-name">Hot Chocolate</div>
+          <div class="card-desc">Rich and creamy chocolate drink — warm, comforting, and indulgent with every sip.</div>
+          <button class="card-detail-toggle" onclick="toggleDetail(this)">
+            Details <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="card-footer">
+            <div class="card-price">N$20.00 <span>/ cup</span></div>
+            <button class="btn-order" onclick="addToCart(this, 'Hot Chocolate')">Add to Order</button>
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-detail-panel">
+          <div class="card-detail-inner">
+            <strong>Ingredients:</strong>
+            <ul><li>Dark chocolate</li><li>Whole milk</li><li>Sugar</li><li>Optional: whipped cream</li></ul>
+            <p style="margin-top:6px;">Allergens: milk, cocoa</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /cozy -->
+
+    <!-- FOOD -->
+    <div class="category-group" data-group="food">
+
+      <div class="item-card">
+        <div class="card-img-wrap">
+          <img src="C:\xampp\htdocs\urbanbites\images\Avocado Toast.jpg" alt="Avocado Toast">
+        </div>
+        <div class="card-body">
+          <div class="card-name">Avocado Toast</div>
+          <div class="card-desc">Sourdough toast topped with smashed avocado, cherry tomatoes, and a sprinkle of chilli flakes.</div>
+          <button class="card-detail-toggle" onclick="toggleDetail(this)">
+            Details <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="card-footer">
+            <div class="card-price">N$45.00 <span>/ plate</span></div>
+            <button class="btn-order" onclick="addToCart(this, 'Avocado Toast')">Add to Order</button>
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-detail-panel">
+          <div class="card-detail-inner">
+            <strong>Ingredients:</strong>
+            <ul><li>Sourdough bread</li><li>Avocado</li><li>Cherry tomatoes</li><li>Lemon, salt, chilli flakes</li></ul>
+            <p style="margin-top:6px;">Allergens: gluten</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card">
+        <div class="card-img-wrap">
+          <img src="C:\xampp\htdocs\urbanbites\images\Club Sandwhich.jpg" alt="Club Sandwich">
+        </div>
+        <div class="card-body">
+          <div class="card-name">Club Sandwich</div>
+          <div class="card-desc">Triple-layered toasted sandwich with chicken, bacon, lettuce, tomato, and mayo.</div>
+          <button class="card-detail-toggle" onclick="toggleDetail(this)">
+            Details <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="card-footer">
+            <div class="card-price">N$55.00 <span>/ plate</span></div>
+            <button class="btn-order" onclick="addToCart(this, 'Club Sandwich')">Add to Order</button>
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-detail-panel">
+          <div class="card-detail-inner">
+            <strong>Ingredients:</strong>
+            <ul><li>White toast bread</li><li>Grilled chicken</li><li>Bacon</li><li>Lettuce, tomato, mayo</li></ul>
+            <p style="margin-top:6px;">Allergens: gluten, egg, pork</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card">
+        <div class="card-img-wrap">
+          <img src="C:\xampp\htdocs\urbanbites\images\Beef Burger.jpg" alt="Beef Burger">
+        </div>
+        <div class="card-body">
+          <div class="card-name">Urban Beef Burger</div>
+          <div class="card-desc">Juicy beef patty with cheddar, caramelised onions, pickles, and house sauce in a brioche bun.</div>
+          <button class="card-detail-toggle" onclick="toggleDetail(this)">
+            Details <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="card-footer">
+            <div class="card-price">N$75.00 <span>/ burger</span></div>
+            <button class="btn-order" onclick="addToCart(this, 'Urban Beef Burger')">Add to Order</button>
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-detail-panel">
+          <div class="card-detail-inner">
+            <strong>Ingredients:</strong>
+            <ul><li>Beef patty</li><li>Cheddar cheese</li><li>Brioche bun</li><li>Pickles, caramelised onions, house sauce</li></ul>
+            <p style="margin-top:6px;">Allergens: gluten, milk, egg</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /food -->
+
+    <!-- DESSERTS -->
+    <div class="category-group" data-group="desserts">
+
+      <div class="item-card">
+        <div class="card-img-wrap">
+          <img src="C:\xampp\htdocs\urbanbites\images\Chocolate Cake.jpg" alt="Chocolate Cake">
+        </div>
+        <div class="card-body">
+          <div class="card-name">Chocolate Fudge Cake</div>
+          <div class="card-desc">Dense, moist chocolate cake with silky ganache frosting — a true indulgence.</div>
+          <button class="card-detail-toggle" onclick="toggleDetail(this)">
+            Details <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="card-footer">
+            <div class="card-price">N$35.00 <span>/ slice</span></div>
+            <button class="btn-order" onclick="addToCart(this, 'Chocolate Fudge Cake')">Add to Order</button>
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-detail-panel">
+          <div class="card-detail-inner">
+            <strong>Ingredients:</strong>
+            <ul><li>Dark chocolate</li><li>Butter, eggs, flour</li><li>Ganache frosting</li></ul>
+            <p style="margin-top:6px;">Allergens: gluten, milk, egg, cocoa</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card">
+        <div class="card-img-wrap">
+          <img src="C:\xampp\htdocs\urbanbites\images\Cinnamon Roll.jpg" alt="Cinnamon Roll">
+        </div>
+        <div class="card-body">
+          <div class="card-name">Cinnamon Roll</div>
+          <div class="card-desc">Freshly baked, soft and fluffy cinnamon roll drizzled with vanilla cream glaze.</div>
+          <button class="card-detail-toggle" onclick="toggleDetail(this)">
+            Details <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="card-footer">
+            <div class="card-price">N$28.00 <span>/ roll</span></div>
+            <button class="btn-order" onclick="addToCart(this, 'Cinnamon Roll')">Add to Order</button>
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-detail-panel">
+          <div class="card-detail-inner">
+            <strong>Ingredients:</strong>
+            <ul><li>Yeast dough</li><li>Cinnamon sugar</li><li>Vanilla cream glaze</li></ul>
+            <p style="margin-top:6px;">Allergens: gluten, milk, egg</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /desserts -->
+
+    <!-- COLD ONES -->
+    <div class="category-group" data-group="cold">
+
+      <div class="item-card">
+        <div class="card-img-wrap">
+          <img src="C:\xampp\htdocs\urbanbites\images\Iced Coffee.jpg" alt="Iced Coffee">
+        </div>
+        <div class="card-body">
+          <div class="card-name">Cold Brew</div>
+          <div class="card-desc">Slow-steeped cold brew coffee — smooth, bold, and refreshingly low in acidity.</div>
+          <button class="card-detail-toggle" onclick="toggleDetail(this)">
+            Details <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="card-footer">
+            <div class="card-price">N$22.00 <span>/ cup</span></div>
+            <button class="btn-order" onclick="addToCart(this, 'Cold Brew')">Add to Order</button>
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-detail-panel">
+          <div class="card-detail-inner">
+            <strong>Ingredients:</strong>
+            <ul><li>Coarse-ground coffee</li><li>Cold filtered water</li><li>Steeped 12 hrs</li></ul>
+            <p style="margin-top:6px;">Allergens: caffeine</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card">
+        <div class="card-img-wrap">
+          <img src="C:\xampp\htdocs\urbanbites\images\Mango Smoothie.jpg" alt="Mango Smoothie">
+        </div>
+        <div class="card-body">
+          <div class="card-name">Mango Smoothie</div>
+          <div class="card-desc">Tropical blend of fresh mango, banana, and yoghurt — thick, sweet, and bright.</div>
+          <button class="card-detail-toggle" onclick="toggleDetail(this)">
+            Details <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="card-footer">
+            <div class="card-price">N$30.00 <span>/ cup</span></div>
+            <button class="btn-order" onclick="addToCart(this, 'Mango Smoothie')">Add to Order</button>
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-num">1</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-detail-panel">
+          <div class="card-detail-inner">
+            <strong>Ingredients:</strong>
+            <ul><li>Fresh mango</li><li>Banana</li><li>Plain yoghurt</li><li>Honey</li></ul>
+            <p style="margin-top:6px;">Allergens: milk</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /cold -->
+
+  </div><!-- /items-grid -->
+</div>
+
+<!-- CART TOAST -->
+<div id="cart-toast"></div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>
+    <h3>Urban Bites Café</h3>
+    <p class="footer-tagline">Fresh coffee. Cozy moments.</p>
+  </div>
+  <div>
+    <h3>Quick Links</h3>
+    <a href="C:\xampp\htdocs\urbanbites\index.html">Home</a>
+    <a href="C:\xampp\htdocs\urbanbites\menu.html">Menu</a>
+    <a href="C:\xampp\htdocs\urbanbites\about.html">About</a>
+    <a href="C:\xampp\htdocs\urbanbites\contact.html">Contact</a>
+  </div>
+  <div>
+    <h3>Contact</h3>
+    <p>Location - Windhoek, Namibia</p>
+    <p>Cell - +264 81 234 5678</p>
+    <p>email - info@urbanbites.com</p>
+  </div>
+</div>
+
+<script>
+  // ── TAB FILTER ──
+  const tabs = document.querySelectorAll('.tab-btn');
+  const groups = document.querySelectorAll('.category-group');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const cat = tab.dataset.cat;
+      groups.forEach(g => {
+        if (cat === 'all' || g.dataset.group === cat) {
+          g.classList.add('visible');
+        } else {
+          g.classList.remove('visible');
+        }
+      });
+    });
+  });
+
+  // ── DETAIL TOGGLE ──
+  function toggleDetail(btn) {
+    const card = btn.closest('.item-card');
+    const panel = card.querySelector('.card-detail-panel');
+    const isOpen = panel.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+  }
+
+  // ── ORDER BUTTON ──
+  function addToCart(btn, name) {
+    btn.style.display = 'none';
+    const qtyCtrl = btn.nextElementSibling;
+    qtyCtrl.classList.add('show');
+    showToast(`${name} added to your order!`);
+  }
+
+  function changeQty(btn, delta) {
+    const ctrl = btn.parentElement;
+    const numEl = ctrl.querySelector('.qty-num');
+    let qty = parseInt(numEl.textContent) + delta;
+    if (qty < 1) {
+      ctrl.classList.remove('show');
+      const orderBtn = ctrl.previousElementSibling;
+      orderBtn.style.display = '';
+      return;
+    }
+    numEl.textContent = qty;
+  }
+
+  // ── TOAST ──
+  let toastTimer;
+  function showToast(msg) {
+    const toast = document.getElementById('cart-toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+  }
+</script>
+</body>
+</html>
